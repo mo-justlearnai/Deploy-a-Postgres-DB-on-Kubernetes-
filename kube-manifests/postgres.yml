@@ -1,0 +1,64 @@
+# ======================================================   
+# Title: DB PVC, Deployment & Cluster IP Service
+# Author: Mattithyahu  
+# Created Date: 07/07/2023  
+# ======================================================
+
+
+# Persistent Volume Claim
+# ======================================================
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-persistent-volume-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100M
+---
+
+# Deployment
+# ======================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: db
+  template:
+    metadata:
+      labels:
+        component: db
+    spec:
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: db-persistent-volume-claim
+      containers:
+        - name: db-container
+          image: justlearnai/postgresdb:latest
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 5432
+
+
+---
+
+# Cluster IP Service
+# ======================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-cluster-ip-service
+spec:
+  type: ClusterIP
+  selector:
+    component: db
+  ports:
+    - port: 5432
+      targetPort: 5432

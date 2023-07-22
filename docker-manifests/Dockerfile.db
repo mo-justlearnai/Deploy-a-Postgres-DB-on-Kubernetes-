@@ -1,0 +1,19 @@
+# ================================================== 
+# Title: Build postgres image 
+# Author: Mattithyahu 
+# Created Date: 07/07/2023  
+# ==================================================
+
+# Pulling the official postgres base image
+FROM postgres
+
+# Argument pathtoservice
+ARG PATHTOSERVICE=./db
+
+# Naming default database, user, and password
+ENV POSTGRES_DB newdb
+ENV POSTGRES_USER postgres
+ENV POSTGRES_PASSWORD password
+
+# Executing SQL file on startup
+COPY $PATHTOSERVICE/init.sql /docker-entrypoint-initdb.d/
