@@ -3,6 +3,8 @@ With initialisation database, schemas, and tables.
 
 ---
 
+<img src="images/Deploy-a-Postgres-DB-on-Kubernetes_fis.png"/>
+
 ### **Databases + Kubernetes.. why?**
 
 The 'why' is answerable by simply listing the pros of Kubernetes. 
